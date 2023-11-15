@@ -1,4 +1,6 @@
 import logging
+import time
+
 import requests
 from bin import commonexception
 
@@ -17,6 +19,8 @@ class GetIP:
         self.logger.debug("Created GetIP class")
 
     ## Get the server's current public IP address
+    # @returns Current IP address in plain text
+    # @throws FatalError IP address not obtainable
     def get(self):
         success = False
         response = None
@@ -40,6 +44,8 @@ class GetIP:
 
         # If an IP address was not obtained from the primary server, attempt to obtain one from the fallback server
         if not success:
+            # Wait in case of a temporary network connectivity issue
+            time.sleep(30)
             try:
                 # Attempt to get IP from fallback server
                 response = requests.get(self._fallback_server_url)
