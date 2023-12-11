@@ -1,6 +1,5 @@
 import logging
 import time
-
 import requests
 from bin import commonexception
 

@@ -1,6 +1,5 @@
 import unittest
 import requests
-import bin
 from bin.ipaccess import GetIP
 
 
