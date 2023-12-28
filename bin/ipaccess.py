@@ -60,11 +60,6 @@ class GetIP:
                 self.logger.critical("Error with fallback IP address server. A response code other than 200 was \
                                         received. Application will exit.")
 
-            # Log other errors
-            except Exception:
-                self.logger.critical("Error with fallback IP address server. An unknown error has occurred. \
-                                        Application will exit.")
-
         # Check an ip address was received
         if success:
             ip_address = response.content.decode("utf-8").strip()
