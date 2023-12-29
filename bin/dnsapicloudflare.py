@@ -8,7 +8,7 @@ import requests
 ## Class to store domain level details
 class CloudflareDomainInfo(DomainInfo):
     def __init__(self):
-        self.filter = None
+        self.filter = []
         self.filter_type = None
         self.zone_name = None
         self.zone_id = None
