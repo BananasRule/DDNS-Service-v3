@@ -1,7 +1,7 @@
 import logging
 import time
 import requests
-from bin import commonexception
+import commonexception
 
 
 ## GetIP class enables access to a server to determine the current public IP address

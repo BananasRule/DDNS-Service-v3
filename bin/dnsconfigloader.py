@@ -1,5 +1,5 @@
-from bin import dnsapicloudflare
-from bin import dnsapiinterface
+import dnsapicloudflare
+import dnsapiinterface
 ## A factory for creating the correct DNSAPI class and associated objects
 # @param config An list containing all lines in the DNS configuration section
 

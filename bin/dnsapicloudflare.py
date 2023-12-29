@@ -1,5 +1,5 @@
-from bin.dnsapiinterface import DNSAPIInterface, DomainInfo, RecordInfo, UpdateInfo, DomainRecords
-import bin.commonexception as comex
+from dnsapiinterface import DNSAPIInterface, DomainInfo, RecordInfo, UpdateInfo, DomainRecords
+import commonexception as comex
 import logging
 import requests
 

@@ -1,6 +1,6 @@
-import bin.commonexception as comex
+import commonexception as comex
 import logging
-from bin.ipaccess import GetIP
+from ipaccess import GetIP
 
 
 def ipconfigloader(config: [str], variables: {str: str}) -> [GetIP, GetIP]:

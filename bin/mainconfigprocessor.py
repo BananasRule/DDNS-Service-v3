@@ -1,11 +1,11 @@
 import logging
 import commonexception as comex
-from bin import dnsconfigloader
-from bin import mailconfigloader
-from bin import ipconfigloader
-from bin import ipaccess
-from bin import mailservice
-from bin import dnsapiinterface
+import dnsconfigloader
+import mailconfigloader
+import ipconfigloader
+import ipaccess
+import mailservice
+import dnsapiinterface
 
 
 class AppletBlock:

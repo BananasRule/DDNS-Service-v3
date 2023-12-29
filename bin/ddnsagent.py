@@ -1,5 +1,5 @@
-from bin.mainconfigprocessor import *
-import bin.commonexception as comex
+from mainconfigprocessor import *
+import commonexception as comex
 import logging
 import datetime
 import os

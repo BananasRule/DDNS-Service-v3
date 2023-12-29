@@ -1,7 +1,7 @@
 import logging
 
-import bin.commonexception as comex
-from bin.mailservice import MailService, DummyMailService
+import commonexception as comex
+from mailservice import MailService, DummyMailService
 
 
 ## Exception class for mail misconfiguration
