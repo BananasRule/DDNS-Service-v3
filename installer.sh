@@ -65,10 +65,10 @@ echo "User: ddnsagent, Group: ddns, Password: $usrpasswd"
 
 #Assign folder ownership
 cd /opt
-chown -R ddnsagent:ddns DDNS-Servicev2
+chown -R ddnsagent:ddns DDNS-Service-v3
 
 #Protect folder from unauthorised access
-su ddnsagent -c "cd /opt && chmod 770 -R DDNS-Servicev2"
+su ddnsagent -c "cd /opt && chmod 770 -R DDNS-Service-v3"
 
 #Add cronjob to run every minute
 su ddnsagent -c "cd && crontab -l > tempcron"
