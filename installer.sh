@@ -32,6 +32,7 @@ echo "Thank you for agreeing to the license terms. Installation will now begin."
 apt update
 apt upgrade -y
 apt install unzip -y
+apt install pwgen -y
 apt install python3 -y
 apt install python3-pip -y
 pip install requests
