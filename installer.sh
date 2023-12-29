@@ -16,7 +16,7 @@ fi
 #Make user aware under which license they are installing the software and get their agreement
 echo "Preparing to install DDNS-Service"
 echo "Please agree to the license terms to continue: "
-echo "This software is licenced under MPL2.0, a copy of which can be found here: https://github.com/BananasRule/DDNS-Servicev2/blob/main/LICENSE.txt"
+echo "This software is licenced under MPL2.0, a copy of which can be found here: https://github.com/BananasRule/DDNS-Service-v3/blob/main/LICENSE.txt"
 echo "This license includes a disclaimer of warranty and limitation of liability."
 echo "By agreeing you explicitly agree to the disclaimer of warranty and limitation of liability in addition agreeing to the full license."
 echo "By agreeing you declare you have read, understood and have the capability to enter into and agree this license."
@@ -71,7 +71,7 @@ su ddnsagent -c "cd /opt && chmod 770 -R DDNS-Servicev2"
 
 #Add cronjob to run every minute
 su ddnsagent -c "cd && crontab -l > tempcron"
-su ddnsagent -c "cd && echo \"* * * * * cd /opt/DDNS-Servicev2 && python3 /opt/DDNS-Servicev2/DDNSUpdateService.py\" >> tempcron"
+su ddnsagent -c "cd && echo \"* * * * * cd /opt/DDNS-Service-v3 && python3 /opt/DDNS-Service-v3/DDNSUpdateService.py\" >> tempcron"
 su ddnsagent -c "cd && crontab tempcron"
 su ddnsagent -c "cd && rm tempcron"
 service cron restart
