@@ -72,7 +72,7 @@ su ddnsagent -c "cd /opt && chmod 770 -R DDNS-Service-v3"
 
 #Add cronjob to run every minute
 su ddnsagent -c "cd && crontab -l > tempcron"
-su ddnsagent -c "cd && echo \"* * * * * cd /opt/DDNS-Service-v3 && python3 /opt/DDNS-Service-v3/DDNSUpdateService.py\" >> tempcron"
+su ddnsagent -c "cd && echo \"* * * * * cd /opt/DDNS-Service-v3/bin && python3 /opt/DDNS-Service-v3/bin/ddnsagent.py\" >> tempcron"
 su ddnsagent -c "cd && crontab tempcron"
 su ddnsagent -c "cd && rm tempcron"
 service cron restart

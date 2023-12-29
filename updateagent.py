@@ -1,5 +1,10 @@
 import subprocess
 import time
+import os
+
+if os.geteuid() != 0:
+    exit("You need to have root privileges to run this script.\n"
+         "Please try again using sudo python3 updateagent.py. Exiting.")
 
 print("Welcome to the DDNS Service v3 update agent.")
 print("This software is licenced under MPL2.0, a copy of which can be found here: "
@@ -33,6 +38,10 @@ for line in current_manifest:
     item, value = line.strip().split("=", 1)
     current_man_details[item] = value
 
+current_manifest.close()
+latest_manifest.close()
+os.remove("/opt/DDNS-Service-v3/data/latest.manifest")
+
 if int(latest_man_details["updaterversion"]) > int(current_man_details["updaterversion"]):
     supportver = latest_man_details["updatercompatibility"].split(",")
     if current_man_details["updaterversion"] in supportver:
@@ -44,6 +53,8 @@ if int(latest_man_details["updaterversion"]) > int(current_man_details["updaterv
 
         if acceptance == "Y":
             subprocess.run("/opt/DDNS-Service-v3/scripts/updater/update_updater.sh")
+            current_manifest = open("/opt/DDNS-Service-v3/data/current.manifest", "a")
+            current_manifest.write("\nupdaterversion="+latest_man_details["updaterversion"])
             print("Please relaunch updater.")
         else:
             print("Program will now exit.")
