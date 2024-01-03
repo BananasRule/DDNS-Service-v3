@@ -1,3 +1,9 @@
+## © Jacob Gray 2024
+## This Source Code Form is subject to the terms of the Mozilla Public
+## License, v. 2.0. If a copy of the MPL was not distributed with this
+## file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
 import logging
 import time
 import requests
@@ -11,9 +17,9 @@ class GetIP:
     # @param primary_server_url The primary server used to get the current public IP. Must return text.
     # @param fallback_server_url The fallback server used to get the current public IP. Must return text.
     def __init__(self, primary_server_url: str, fallback_server_url: str):
-        self.logger = logging.getLogger(__name__)
-        self._primary_server_url = primary_server_url
-        self._fallback_server_url = fallback_server_url
+        self.logger: logging.Logger = logging.getLogger(__name__)
+        self._primary_server_url: str = primary_server_url
+        self._fallback_server_url: str = fallback_server_url
         self.logger.debug("Created GetIP class")
 
     ## Get the server's current public IP address

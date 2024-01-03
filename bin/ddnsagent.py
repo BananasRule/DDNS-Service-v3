@@ -1,3 +1,9 @@
+## © Jacob Gray 2024
+## This Source Code Form is subject to the terms of the Mozilla Public
+## License, v. 2.0. If a copy of the MPL was not distributed with this
+## file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
 from mainconfigprocessor import *
 import commonexception as comex
 import logging
@@ -14,6 +20,7 @@ loc = os.getcwd()
 try:
     last_run_data = open("../data/run.data")
 except FileNotFoundError:
+    # Allow for an exception if data file is not found
     logger.warning("Data file not found. Assuming worst case (Failure occurred, no email sent).")
     failure = True
     last_ipv4_address = "0"
@@ -23,7 +30,7 @@ else:
     failure, last_ipv4_address, last_ipv6_address, error_email = last_run_data.readline().strip().split(",")
     last_run_data.close()
 
-# Process last run data
+# Process last run data and convert to usable variables
 if failure == "0":
     failure = False
 else:
@@ -43,7 +50,7 @@ else:
 # Load config
 applet_block = mainconfigloader()
 
-# Get IP addresses
+# Get current IP addresses
 if applet_block.ipv4_service is not None:
     ipv4_address = applet_block.ipv4_service.get()
 else:

@@ -1,3 +1,9 @@
+## © Jacob Gray 2024
+## This Source Code Form is subject to the terms of the Mozilla Public
+## License, v. 2.0. If a copy of the MPL was not distributed with this
+## file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
 import smtplib
 import datetime
 
@@ -15,16 +21,16 @@ class MailService:
     # @param toAddress The address the message will be sent to (String)
     def __init__(self, server: str, port: int, key: str, secret: str, tls: bool, ssl: bool,
                  from_address: str, to_address: str, send_ip: bool):
-        self.partHeader = "To:" + to_address + "\nFrom:" + from_address + "\n"
-        self.server = server
-        self.port = port
-        self.key = key
-        self.secret = secret
-        self.tls = tls
-        self.ssl = ssl
-        self.from_address = from_address
-        self.to_address = to_address
-        self.send_IP = send_ip
+        self.partHeader: str = "To:" + to_address + "\nFrom:" + from_address + "\n"
+        self.server: str = server
+        self.port: int = port
+        self.key: str = key         # Mailjet naming convention (key = username; secret = password)
+        self.secret: str = secret
+        self.tls: bool = tls
+        self.ssl: bool = ssl
+        self.from_address: str = from_address
+        self.to_address: str = to_address
+        self.send_IP: str = send_ip
 
     ## Function used to send messages
     # @param subject The message subject
@@ -88,7 +94,11 @@ class MailService:
         # Return message
         return message
 
-    def footer(self, message: str, current_ip: str):
+    ## Add a footer to the composed message
+    # @param message Composed message
+    # @param current_ip Current IP address
+    # @returns Message with footer
+    def footer(self, message: str, current_ip: str) -> str:
         # Add blank line
         message = message + "\n"
         # If sendIP address is true send the current IP address

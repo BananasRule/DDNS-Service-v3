@@ -1,4 +1,10 @@
-from dnsapiinterface import DNSAPIInterface, DomainInfo, RecordInfo, UpdateInfo, DomainRecords
+## © Jacob Gray 2024
+## This Source Code Form is subject to the terms of the Mozilla Public
+## License, v. 2.0. If a copy of the MPL was not distributed with this
+## file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+from dnsapiinterface import DNSAPIInterface, DomainInfo, RecordInfo, UpdateInfo, DomainRecords, UpdateError
 import commonexception as comex
 import logging
 import requests
@@ -8,32 +14,33 @@ import requests
 ## Class to store domain level details
 class CloudflareDomainInfo(DomainInfo):
     def __init__(self):
-        self.filter = []
-        self.filter_type = None
-        self.zone_name = None
-        self.zone_id = None
-        self.zone_key = None
-        self.IP_type = None
+        self.filter: [str] = []
+        self.filter_type: int | None = None
+        self.zone_name: str | None = None
+        self.zone_id: str | None = None
+        self.zone_key: str | None = None
+        self.IP_type: str | None = None
 
 
 # noinspection PyMissingConstructor
 ## Class to store record details
 class CloudflareRecordInfo(RecordInfo):
     def __init__(self, record_name: str, IP_address: str, record_id: str):
-        self.record_name = record_name
-        self.IP_address = IP_address
-        self.record_id = record_id
+        self.record_name: str = record_name
+        self.IP_address: str = IP_address
+        self.record_id: str = record_id
 
 
 # noinspection PyMissingConstructor
 # Suppress naming for clarity - DNSAPICloudflare
 # noinspection PyUnusedLocal
+# Limited details are stored at this level as Cloudflare operates with individual zones
 ## Main class implementing _DNSAPI_Interface() interface
 class DNSAPICloudflare(DNSAPIInterface):
     ## Create a DNSAPI Cloudflare variation object
     # @param apiinfo List [apitoken]
     def __init__(self, discard: [any]):
-        self.logger = logging.getLogger(__name__)
+        self.logger: logging.Logger = logging.getLogger(__name__)
 
     ## Function to return all records found using domaininfo
     # @param domain_info Object of CloudflareDomainInfo type
@@ -162,11 +169,6 @@ class DNSAPICloudflare(DNSAPIInterface):
         return update_info
 
 
-## Class for an update error
-class UpdateError(Exception):
-    pass
-
-
 ## Function for creating the class and associated variables from a config file
 # @param config An list of string containing the config for the DNS section
 # @param variables An dictionary of stored variables
@@ -237,6 +239,7 @@ def cloudflarednsconfigloader(config: [str], variables: {str: str}) -> [DNSAPICl
                     value = variables[value]
                 else:
                     comex.log_fatal(logger, "Variable used without assignment. Program will now terminate.")
+
             # Check that setting is not expected outside a zone
             if setting != "provider":
                 # Check that setting is not outside a zone
@@ -258,13 +261,14 @@ def cloudflarednsconfigloader(config: [str], variables: {str: str}) -> [DNSAPICl
                                 dns_record.filter.append(rule.strip())
                         case "zone_filter":
                             # Test to see if word is in allow / deny list - Default to off
-                            if value.lower() in ["allow", "only", "include"]:  # Allow
+                            if value.lower() in ["allow", "only", "include"]:   # Allow
                                 dns_record.filter_type = 1
                             elif value.lower() in ["deny", "skip", "exclude"]:  # Deny
                                 dns_record.filter_type = 0
-                            else:  # Off
+                            else:                                               # Off
                                 dns_record.filter_type = -1
                         case "ip_type":
                             dns_record.IP_type = value
-    dnsapi = DNSAPICloudflare([])
-    return dnsapi, dns_records
+    # Return completed object and records
+    dns_api = DNSAPICloudflare([])
+    return dns_api, dns_records

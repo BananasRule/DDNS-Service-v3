@@ -1,6 +1,6 @@
 #!/bin/bash
 
-## © Jacob Gray 2022
+## © Jacob Gray 2024
 ## This Source Code Form is subject to the terms of the Mozilla Public
 ## License, v. 2.0. If a copy of the MPL was not distributed with this
 ## file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -12,22 +12,22 @@ if [ "$EUID" -ne 0 ]
 fi
 
 
-#License agreement
-#Make user aware under which license they are installing the software and get their agreement
+# License agreement
+# Make user aware under which license they are installing the software and get their agreement
 echo "Preparing to install DDNS-Service"
 echo "Please agree to the license terms to continue: "
 echo "This software is licenced under MPL2.0, a copy of which can be found here: https://github.com/BananasRule/DDNS-Service-v3/blob/main/LICENSE.txt"
 echo "This license includes a disclaimer of warranty and limitation of liability."
-echo "By agreeing you explicitly agree to the disclaimer of warranty and limitation of liability in addition agreeing to the full license."
+echo "By agreeing you explicitly agree to the disclaimer of warranty and limitation of liability contained within the MPL 2.0 license."
 echo "By agreeing you declare you have read, understood and have the capability to enter into and agree this license."
-#Force user to read above paragraph
+# Force user to read above paragraph
 sleep 5
-#Check acceptance with agreement
+# Check acceptance with agreement
 read -p "Do you agree to the license terms? (Y/N): " acceptance
 acceptance=${acceptance^^}
 if [ "${acceptance}" = "Y" ]
 then
-#Install dependencies
+# Install dependencies
 echo "Thank you for agreeing to the license terms. Installation will now begin."
 apt update
 apt upgrade -y
@@ -37,25 +37,25 @@ apt install python3 -y
 apt install python3-pip -y
 pip install requests
 
-#Create folder
+# Create folder
 cd /opt
 mkdir DDNS-Service-v3
 cd DDNS-Service-v3
-#Download software from latest release and unzip
+# Download software from latest release and unzip
 wget https://github.com/BananasRule/DDNS-Service-v3/releases/latest/download/DDNS-Service-v3-Release.zip
 unzip DDNS-Service-v3-Release.zip
 rm DDNS-Service-v3-Release.zip
 
-#Copy example config and open config file for user to enter data to
+# Copy example config and open config file for user to enter data to
 cd config
 cp example_config.conf config.conf
 nano config.conf
 
 
-#Create group
+# Create group
 addgroup ddns
 
-#Create user account for agent
+# Create user account for agent
 usrpasswd="$(pwgen -s $((${RANDOM:0:2} + 30 )))"
 adduser --disabled-password --gecos "" ddnsagent
 usermod -aG ddns ddnsagent
@@ -63,14 +63,14 @@ echo -e "$usrpasswd\n$usrpasswd\n" | passwd ddnsagent
 
 echo "User: ddnsagent, Group: ddns, Password: $usrpasswd"
 
-#Assign folder ownership
+# Assign folder ownership
 cd /opt
 chown -R ddnsagent:ddns DDNS-Service-v3
 
-#Protect folder from unauthorised access
+# Protect folder from unauthorised access
 su ddnsagent -c "cd /opt && chmod 770 -R DDNS-Service-v3"
 
-#Add cronjob to run every minute
+# Add cronjob to run every minute
 su ddnsagent -c "cd && crontab -l > tempcron"
 su ddnsagent -c "cd && echo \"* * * * * cd /opt/DDNS-Service-v3/bin && python3 /opt/DDNS-Service-v3/bin/ddnsagent.py\" >> tempcron"
 su ddnsagent -c "cd && crontab tempcron"
