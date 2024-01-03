@@ -7,7 +7,7 @@
 from mainconfigprocessor import *
 import commonexception as comex
 import logging
-import datetime
+import time
 import os
 
 # Create logger
@@ -19,15 +19,17 @@ logger = logging.getLogger()
 loc = os.getcwd()
 try:
     last_run_data = open("../data/run.data")
-except FileNotFoundError:
+    failure, last_ipv4_address, last_ipv6_address, error_email_time, last_run_time = (
+        last_run_data.readline().strip().split(","))
+except FileNotFoundError or ValueError:
     # Allow for an exception if data file is not found
     logger.warning("Data file not found. Assuming worst case (Failure occurred, no email sent).")
     failure = True
     last_ipv4_address = "0"
     last_ipv6_address = "0"
-    error_email = False
+    error_email_time = "0"
+    last_run_time = "0"
 else:
-    failure, last_ipv4_address, last_ipv6_address, error_email = last_run_data.readline().strip().split(",")
     last_run_data.close()
 
 # Process last run data and convert to usable variables
@@ -42,10 +44,17 @@ if last_ipv4_address == "0":
 if last_ipv6_address == "0":
     last_ipv6_address = None
 
-if error_email == "0":
-    error_email = False
-else:
-    error_email = True
+# If time cannot be converted to int set to 0
+try:
+    last_run_time = int(last_run_time)
+except ValueError:
+    last_run_time = 0
+
+try:
+    error_email_time = int(error_email_time)
+except ValueError:
+    error_email_time = 0
+
 
 # Load config
 applet_block = mainconfigloader()
@@ -61,8 +70,9 @@ else:
     ipv6_address = None
 
 # Define conditions for an update
+# Change in ip address, failure occurred in last run or over 1 hour since last check
 if ipv4_address != last_ipv4_address or ipv6_address != last_ipv6_address or failure or \
-        datetime.datetime.now().minute == 1:
+        last_run_time > int(time.time()) + 3600:
 
     logger.info("Update / domain check required.")
 
@@ -131,20 +141,15 @@ if ipv4_address != last_ipv4_address or ipv6_address != last_ipv6_address or fai
     else:
         subject = "DNS update failed"
 
-    # Reset error email status each hour
-    if datetime.datetime.now().minute == 1:
-        error_email = False
-
     # Check if email should be sent
     # Send if:
     # Error email not sent in last hour and a failure has occurred
     # Update occurred
-    if (not error_email and failure) or update:
+    if (error_email_time > int(time.time()) + 3600 and failure) or update:
         applet_block.mail_service.send(subject, email_message)
         logger.info("Email Sent.")
         if failure:
-            # If failure email sent update error email status
-            error_email = True
+            error_email_time = int(time.time())
 
     # Open data file for writing
     run_data = open("../data/run.data", "w")
@@ -154,12 +159,6 @@ if ipv4_address != last_ipv4_address or ipv6_address != last_ipv6_address or fai
     else:
         fail_val = "1"
 
-    # Set error email value
-    if not error_email:
-        error_email_val = "0"
-    else:
-        error_email_val = "1"
-
     # Set ip address to 0 if none
     if ipv4_address is None:
         ipv4_address = "0"
@@ -167,7 +166,8 @@ if ipv4_address != last_ipv4_address or ipv6_address != last_ipv6_address or fai
         ipv6_address = "0"
 
     # Write data
-    run_data.write(fail_val + "," + ipv4_address + "," + ipv6_address + "," + error_email_val)
+    run_data.write(fail_val + "," + ipv4_address + "," + ipv6_address + "," + str(error_email_time) + "," +
+                   str(int(time.time())))
     run_data.close()
 
     # Log success and terminate
