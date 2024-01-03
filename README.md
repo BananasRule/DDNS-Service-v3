@@ -18,7 +18,7 @@ DNS services in the future.
 
 # Operation
 This program is designed to check for IP address changes every minute, with a check of the DNS record occurring hourly. 
-It is able to email the status of DNS updates to a designated email address using STMP. 
+It is able to email the status of DNS updates to a designated email address using SMTP. 
 
 # Install
 An installation script is provided and can be run using the following command:
