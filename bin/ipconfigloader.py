@@ -24,7 +24,7 @@ def ipconfigloader(config: [str], variables: {str: str}) -> [GetIP, GetIP]:
         # Check if the value is a variable, and replace it with the var
         if value[0] == "$":
             if value[1:] in variables:
-                value = variables[value]
+                value = variables[value[1:]]
             else:
                 comex.log_fatal(logger, "Variable used without assignment. Program will now terminate.")
 
