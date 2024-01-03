@@ -26,7 +26,7 @@ print("By agreeing you declare you have read, understood and have the capability
 time.sleep(3)
 
 # Check user agreement to license conditions
-acceptance = input("Do you agree to these terms? [Y/N]")
+acceptance = input("Do you agree to these terms? [Y/N]: ")
 
 if acceptance != "Y":
     print("Terms declined. Updater will now exit.")
@@ -42,12 +42,14 @@ else:
     current_man_details = {}
 
     for line in latest_manifest:
-        item, value = line.strip().split("=", 1)
-        latest_man_details[item] = value
+        if len(line.strip()) > 0:
+            item, value = line.strip().split("=", 1)
+            latest_man_details[item] = value
 
     for line in current_manifest:
-        item, value = line.strip().split("=", 1)
-        current_man_details[item] = value
+        if len(line.strip()) > 0:
+            item, value = line.strip().split("=", 1)
+            current_man_details[item] = value
 
     # Close manifest file and clean up file
     current_manifest.close()
@@ -65,7 +67,7 @@ else:
             print("It can be automatically installed.")
             print("Update notes:")
             print(latest_man_details["updaternotes"])
-            acceptance = input("Would you like to proceed? [Y/N]")
+            acceptance = input("Would you like to proceed? [Y/N]: ")
 
             if acceptance == "Y":
                 # Run the download script and patch the current manifest
@@ -91,7 +93,7 @@ else:
                 print("It can be installed automatically.")
                 print("Update notes:")
                 print(latest_man_details["programnotes"])
-                acceptance = input("Would you like to proceed? [Y/N]")
+                acceptance = input("Would you like to proceed? [Y/N]: ")
 
                 if acceptance == "Y":
                     # Run updater script
