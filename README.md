@@ -43,3 +43,5 @@ These include:
 - Better support for future expansion 
 - Improved code documentation 
 
+# Application Test
+Tests are not functional and require further development.
