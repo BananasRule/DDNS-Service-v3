@@ -30,7 +30,7 @@ class MailService:
         self.ssl: bool = ssl
         self.from_address: str = from_address
         self.to_address: str = to_address
-        self.send_IP: str = send_ip
+        self.send_IP: bool = send_ip
 
     ## Function used to send messages
     # @param subject The message subject

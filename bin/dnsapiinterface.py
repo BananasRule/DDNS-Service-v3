@@ -31,10 +31,10 @@ class DomainRecords:
         self.records: [RecordInfo] = recordsinfo
 
 
-
 ## @interface
 class DNSAPIInterface:
 
+    # noinspection PyUnusedLocal
     ## A generic initialisation
     # @param apiinfo List customised for each provider
     def __init__(self, apiinfo: [any]):
@@ -60,6 +60,7 @@ class DNSAPIInterface:
 
     def multi_update(self, recordsinfo: [RecordInfo], domaininfo: DomainInfo, currentIP: str) -> UpdateInfo:
         raise NotImplementedError("Abstract DNSAPI class called")
+
 
 ## Class for an update error
 class UpdateError(Exception):
