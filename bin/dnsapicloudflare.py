@@ -81,6 +81,7 @@ class DNSAPICloudflare(DNSAPIInterface):
                 ip_address = record["content"]
                 record_info.append(CloudflareRecordInfo(domain_name, ip_address, domain_id))
             # Return list
+            self.logger.debug("Domain data received for " + domain_info.zone_name + ".")
             return record_info
 
     ## Function to operate with a list of all records
@@ -93,6 +94,7 @@ class DNSAPICloudflare(DNSAPIInterface):
             records = self.get_records(domain_info)
             complete_record = DomainRecords(domain_info, records)
             all_records.append(complete_record)
+        self.logger.debug("All domain data received for Cloudflare DNS.")
         return all_records
 
     ## Function to patch records with new IP address
@@ -131,6 +133,7 @@ class DNSAPICloudflare(DNSAPIInterface):
             raise UpdateError
         else:
             # Patch successful
+            self.logger.debug("Record updated: " + record_info.record_name + ", " + domain_info.zone_name + ".")
             return
 
     ## Function to preform multiple updates on the same domain
@@ -166,6 +169,7 @@ class DNSAPICloudflare(DNSAPIInterface):
                             update_info.success.append(record_info.record_name)
                 else:
                     logger.info("Record (" + record_info.record_name.split(".", 1)[0] + ") filtered.")
+        logger.debug("All Cloudflare records in " + domain_info.zone_name + " have been updated.")
         return update_info
 
 
@@ -271,4 +275,5 @@ def cloudflarednsconfigloader(config: [str], variables: {str: str}) -> [DNSAPICl
                             dns_record.IP_type = value
     # Return completed object and records
     dns_api = DNSAPICloudflare([])
+    logger.debug("Cloudflare DNS objects loaded.")
     return dns_api, dns_records

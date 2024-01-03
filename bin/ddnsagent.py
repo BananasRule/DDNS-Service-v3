@@ -11,10 +11,10 @@ import time
 import os
 
 # Create logger
-logging.basicConfig(filename="ddnsagent.log", level=logging.DEBUG, force=True,
+logging.basicConfig(filename="ddnsagent.log", level=logging.INFO, force=True,
                     format="%(asctime)s: %(process)d-%(levelname)s - %(message)s")
 logger = logging.getLogger()
-
+logger.info("Script started.")
 # Load data from last run
 loc = os.getcwd()
 try:
@@ -30,6 +30,7 @@ except FileNotFoundError or ValueError:
     error_email_time = "0"
     last_run_time = "0"
 else:
+    logger.info("Data loaded.")
     last_run_data.close()
 
 # Process last run data and convert to usable variables
@@ -122,6 +123,8 @@ if ipv4_address != last_ipv4_address or ipv6_address != last_ipv6_address or fai
         if len(update_status.success) != 0:
             update = True
 
+    logger.info("DNS Records Updated.")
+
     # Determine ip address to send in email
     if ipv4_address is not None and ipv6_address is not None:
         ip_address = ipv4_address + ", " + ipv6_address
@@ -172,3 +175,6 @@ if ipv4_address != last_ipv4_address or ipv6_address != last_ipv6_address or fai
 
     # Log success and terminate
     logger.info("Run successful.")
+
+else:
+    logger.info("Update not required.")

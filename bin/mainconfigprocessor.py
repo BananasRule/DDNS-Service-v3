@@ -171,8 +171,9 @@ def mainconfigloader() -> AppletBlock:
 
     # Call loaders for services and add to applet block
     applet_block = AppletBlock()
+    logger.debug("Config files finalised")
     applet_block.dns_api, applet_block.domain_records = dnsconfigloader.dnsconfigloader(dnsconfig, variables)
     applet_block.mail_service = mailconfigloader.mailconfigloader(mailconfig, variables)
     applet_block.ipv4_service, applet_block.ipv6_service = ipconfigloader.ipconfigloader(ipconfig, variables)
-
+    logger.debug("Services created")
     return applet_block

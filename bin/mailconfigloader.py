@@ -124,7 +124,8 @@ def mailconfigloader(config: [str], variables: {str: str}) -> MailService:
     # If there was a setting error, return the dummy mail object
     except MailError:
         mail_service = DummyMailService()
+        logger.error("Dummy mail service created.")
     else:
         mail_service = MailService(server, port, key, secret, tls, ssl, from_address, to_address, send_ip)
-
+        logger.info("Mail service loaded.")
     return mail_service

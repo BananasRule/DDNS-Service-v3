@@ -2,8 +2,7 @@
 ## This Source Code Form is subject to the terms of the Mozilla Public
 ## License, v. 2.0. If a copy of the MPL was not distributed with this
 ## file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-
+import logging
 import smtplib
 import datetime
 
@@ -31,6 +30,7 @@ class MailService:
         self.from_address: str = from_address
         self.to_address: str = to_address
         self.send_IP: bool = send_ip
+        self.logger = logging.getLogger(__name__)
 
     ## Function used to send messages
     # @param subject The message subject
@@ -51,12 +51,17 @@ class MailService:
             mailserver.starttls()
             mailserver.ehlo()
 
+        self.logger.debug("Mail server connected.")
+
         # Login to mail server
         mailserver.login(self.key, self.secret)
+
+        self.logger.debug("Mail service logged in.")
 
         # Send message
         mailserver.sendmail(self.from_address, self.to_address, msg)
 
+        self.logger.debug("Email sent.")
         # Close connection
         mailserver.quit()
 
